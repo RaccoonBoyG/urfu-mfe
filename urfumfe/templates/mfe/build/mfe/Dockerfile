@@ -65,7 +65,7 @@ ARG ENABLE_NEW_RELIC=false
 ######## {{ app["name"] }} (dev)
 FROM {{ app["name"] }}-common AS {{ app["name"] }}-dev
 ENV NODE_ENV=development
-CMD ["/bin/bash", "-c", "npm run start --- --config ./webpack.dev-tutor.config.js"]
+CMD ["/bin/bash", "-c", "npm run start --- --config ./webpack.dev-urfu.config.js"]
 {% endfor %}
 
 # Production images are last to accelerate dev image building

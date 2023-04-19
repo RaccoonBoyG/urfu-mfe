@@ -13,7 +13,7 @@ def load_readme():
 def load_about():
     about = {}
     with io.open(
-        os.path.join(HERE, "tutormfe", "__about__.py"), "rt", encoding="utf-8"
+        os.path.join(HERE, "urfumfe", "__about__.py"), "rt", encoding="utf-8"
     ) as f:
         exec(f.read(), about)  # pylint: disable=exec-used
     return about
@@ -22,26 +22,25 @@ def load_about():
 ABOUT = load_about()
 
 setup(
-    name="tutor-mfe",
+    name="urfu-mfe",
     version=ABOUT["__version__"],
-    url="https://github.com/overhangio/tutor-mfe",
+    url="https://github.com/RaccoonBoyG/urfu-mfe",
     project_urls={
-        "Code": "https://github.com/overhangio/tutor-mfe",
-        "Issue tracker": "https://github.com/overhangio/tutor-mfe/issues",
-        "Community": "https://discuss.openedx.org/tag/tutor",
+        "Code": "https://github.com/RaccoonBoyG/urfu-mfe",
+        "Issue tracker": "https://github.com/RaccoonBoyG/urfu-mfe/issues",
     },
     license="AGPLv3",
     author="Overhang.IO",
     maintainer="tCRIL",
     maintainer_email="adolfo@tcril.org",
-    description="mfe plugin for Tutor",
+    description="mfe plugin for Urfu",
     long_description=load_readme(),
     long_description_content_type="text/x-rst",
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
     python_requires=">=3.5",
-    install_requires=["tutor>=15.0.0,<16.0.0"],
-    entry_points={"tutor.plugin.v1": ["mfe = tutormfe.plugin"]},
+    install_requires=["urfu>=15.0.0,<16.0.0"],
+    entry_points={"urfu.plugin.v1": ["mfe = urfumfe.plugin"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

@@ -2,8 +2,8 @@ from glob import glob
 import os
 import pkg_resources
 
-from tutor import hooks as tutor_hooks
-from tutor.hooks import priorities
+from urfu import hooks as urfu_hooks
+from urfu.hooks import priorities
 
 from .__about__ import __version__
 
@@ -63,7 +63,7 @@ ALL_MFES = (
 
 with open(
     os.path.join(
-        pkg_resources.resource_filename("tutormfe", "templates"),
+        pkg_resources.resource_filename("urfumfe", "templates"),
         "mfe",
         "tasks",
         "lms",
@@ -71,10 +71,10 @@ with open(
     ),
     encoding="utf-8",
 ) as task_file:
-    tutor_hooks.Filters.CLI_DO_INIT_TASKS.add_item(("lms", task_file.read()))
+    urfu_hooks.Filters.CLI_DO_INIT_TASKS.add_item(("lms", task_file.read()))
 
 # Build, pull and push mfe base image
-tutor_hooks.Filters.IMAGES_BUILD.add_item(
+urfu_hooks.Filters.IMAGES_BUILD.add_item(
     (
         "mfe",
         ("plugins", "mfe", "build", "mfe"),
@@ -82,13 +82,13 @@ tutor_hooks.Filters.IMAGES_BUILD.add_item(
         (),
     )
 )
-tutor_hooks.Filters.IMAGES_PULL.add_item(
+urfu_hooks.Filters.IMAGES_PULL.add_item(
     (
         "mfe",
         "{{ MFE_DOCKER_IMAGE }}",
     )
 )
-tutor_hooks.Filters.IMAGES_PUSH.add_item(
+urfu_hooks.Filters.IMAGES_PUSH.add_item(
     (
         "mfe",
         "{{ MFE_DOCKER_IMAGE }}",
@@ -99,7 +99,7 @@ tutor_hooks.Filters.IMAGES_PUSH.add_item(
 for mfe in ALL_MFES:
     name = f"{mfe}-dev"
     tag = "{{ DOCKER_REGISTRY }}overhangio/openedx-" + mfe + "-dev:{{ MFE_VERSION }}"
-    tutor_hooks.Filters.IMAGES_BUILD.add_item(
+    urfu_hooks.Filters.IMAGES_BUILD.add_item(
         (
             name,
             ("plugins", "mfe", "build", "mfe"),
@@ -107,11 +107,11 @@ for mfe in ALL_MFES:
             (f"--target={mfe}-dev",),
         )
     )
-    tutor_hooks.Filters.IMAGES_PULL.add_item((name, tag))
-    tutor_hooks.Filters.IMAGES_PUSH.add_item((name, tag))
+    urfu_hooks.Filters.IMAGES_PULL.add_item((name, tag))
+    urfu_hooks.Filters.IMAGES_PUSH.add_item((name, tag))
 
 
-@tutor_hooks.Filters.COMPOSE_MOUNTS.add()
+@urfu_hooks.Filters.COMPOSE_MOUNTS.add()
 def _mount_frontend_apps(volumes, name):
     """
     If the user mounts any repo named frontend-app-APPNAME, then make sure
@@ -132,11 +132,11 @@ def _mount_frontend_apps(volumes, name):
 
 # Boilerplate code
 # Add the "templates" folder as a template root
-tutor_hooks.Filters.ENV_TEMPLATE_ROOTS.add_item(
-    pkg_resources.resource_filename("tutormfe", "templates")
+urfu_hooks.Filters.ENV_TEMPLATE_ROOTS.add_item(
+    pkg_resources.resource_filename("urfumfe", "templates")
 )
 # Render the "build" and "apps" folders
-tutor_hooks.Filters.ENV_TEMPLATE_TARGETS.add_items(
+urfu_hooks.Filters.ENV_TEMPLATE_TARGETS.add_items(
     [
         ("mfe/build", "plugins"),
         ("mfe/apps", "plugins"),
@@ -145,12 +145,12 @@ tutor_hooks.Filters.ENV_TEMPLATE_TARGETS.add_items(
 # Load patches from files
 for path in glob(
     os.path.join(
-        pkg_resources.resource_filename("tutormfe", "patches"),
+        pkg_resources.resource_filename("urfumfe", "patches"),
         "*",
     )
 ):
     with open(path, encoding="utf-8") as patch_file:
-        # Here we force tutor-mfe lms patches to be loaded first, thus ensuring when opreators override
+        # Here we force urfu-mfe lms patches to be loaded first, thus ensuring when opreators override
         # MFE_CONFIG and/or MFE_CONFIG_OVERRIDES, their patches will be loaded after this plugin's
         patch_name = os.path.basename(path)
         priority = (
@@ -159,17 +159,17 @@ for path in glob(
             in ["openedx-lms-production-settings", "openedx-lms-development-settings"]
             else priorities.DEFAULT
         )
-        tutor_hooks.Filters.ENV_PATCHES.add_item(
+        urfu_hooks.Filters.ENV_PATCHES.add_item(
             (patch_name, patch_file.read()), priority=priority
         )
 
 # Add configuration entries
-tutor_hooks.Filters.CONFIG_DEFAULTS.add_items(
+urfu_hooks.Filters.CONFIG_DEFAULTS.add_items(
     [(f"MFE_{key}", value) for key, value in config.get("defaults", {}).items()]
 )
-tutor_hooks.Filters.CONFIG_UNIQUE.add_items(
+urfu_hooks.Filters.CONFIG_UNIQUE.add_items(
     [(f"MFE_{key}", value) for key, value in config.get("unique", {}).items()]
 )
-tutor_hooks.Filters.CONFIG_OVERRIDES.add_items(
+urfu_hooks.Filters.CONFIG_OVERRIDES.add_items(
     list(config.get("overrides", {}).items())
 )
