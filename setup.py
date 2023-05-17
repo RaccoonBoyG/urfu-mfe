@@ -39,7 +39,7 @@ setup(
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
     python_requires=">=3.5",
-    install_requires=["urfu>=15.0.0,<16.0.0"],
+    install_requires=["urfu>=16.0.0,<17.0.0"],
     entry_points={"urfu.plugin.v1": ["mfe = urfumfe.plugin"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
