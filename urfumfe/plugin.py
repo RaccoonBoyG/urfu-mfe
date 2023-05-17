@@ -49,6 +49,11 @@ config = {
             "repository": "https://github.com/openedx/frontend-app-profile",
             "port": 1995,
         },
+        "LEARNER_HOME_MFE_APP": {
+            "name": "learner-home",
+            "repository": "https://github.com/openedx/frontend-app-learner-dashboard",
+            "port": 1996,
+        },
     },
 }
 ALL_MFES = (
@@ -59,6 +64,7 @@ ALL_MFES = (
     "gradebook",
     "learning",
     "profile",
+    "learner-home"
 )
 
 with open(
