@@ -15,7 +15,7 @@ from .hooks import MFE_ATTRS_TYPE, MFE_APPS
 config = {
     "defaults": {
         "VERSION": __version__,
-        "DOCKER_IMAGE": "{{ DOCKER_REGISTRY }}overhangio/openedx-mfe:{{ MFE_VERSION }}",
+        "DOCKER_IMAGE": "{{ DOCKER_REGISTRY }}alexkekovich31/openedx-mfe:{{ MFE_VERSION }}",
         "HOST": "apps.{{ LMS_HOST }}",
         "COMMON_VERSION": "{{ OPENEDX_COMMON_VERSION }}",
         "CADDY_DOCKER_IMAGE": "{{ DOCKER_IMAGE_CADDY }}",
